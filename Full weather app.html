@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false">
+
+    </script>
+    <style>
+      body{
+        background-color: darkgray;
+      }
+      #searchBar{
+        text-align: center;
+        display: inline-block;
+        
+        height: 60px;
+        width: 40%;
+        margin: auto;
+        margin-left: 27%;
+        margin-bottom: 2%
+      }
+      iframe{
+        height:100%;
+        width:100%;
+        border:0;
+      }
+      #city{
+        text-align: center;
+        font-size: 25px;
+        border-radius: 5px;
+        height: 75%;
+      }
+      #search{
+        font-size: 27px;
+        border-radius: 5px;
+        border-style: none;
+        height: 90%;
+        text-align: center;
+      }
+      /* #map{
+            height: 400px;
+            width: 100%;
+        } */
+      #embedmap-canvas img{
+            max-width:none!important;
+            background:none!important;
+            font-size: inherit;
+            font-weight:inherit;
+        }
+
+      #embedmap-canvas{
+          height:100%;
+          width:100%;
+          margin: auto;
+        }
+
+        #resultBody{
+          width: 70%;
+          height: 150px;
+          margin: auto;
+         
+          display: grid;
+          grid-template-rows: 1fr 2fr;
+        }
+
+        #last{
+         
+          font-size: 35px;
+          text-align: center;
+          font-family: Verdana, Geneva, Tahoma, sans-serif;
+          color:#3F4040;
+        }
+        
+        #result{
+          background-color: #C7C7C7;
+          display: block;
+          align-items: center;
+          height: 150px;
+        }
+        .class{
+          height: 100%;
+          width: 12%;
+          border: 1px solid black;
+          background-color: #3F4040;
+          margin: auto;
+          margin-left: 1.5%;
+          border-radius: 5px;
+          display: inline-block;
+          text-align: center;
+          font-family: Verdana, Geneva, Tahoma, sans-serif;
+          font-size: 18px;
+          color:aliceblue;
+        }
+        .icon{
+          height: 50%;
+          width: 50%;
+        }
+    </style>
+</head>
+<body>
+  <div id="searchBar">
+    <input type="text" id="city">
+    <button id="search" onclick="search()">Search</button>
+  </div>
+
+  <div id="resultBody">
+    <div id="last"></div>
+    <div id="result">
+      <p class="class"></p>
+      <p class="class"></p>
+      <p class="class"></p>
+      <p class="class"></p>
+      <p class="class"></p>
+      <p class="class"></p>
+      <p class="class"></p>
+    </div>
+  </div>
+<br>
+  <div id="embedmap-canvas">
+    <iframe id='iframe'></iframe>
+  </div>
+
+</body>
+</html>
+<script>
+    let key = "b989b04580c8376155ef689060af8897";
+
+    let resultDiv = document.getElementById('result');
+
+    let results = document.getElementsByClassName('class');
+
+    var iframe = document.getElementById('iframe');
+
+    var last = document.getElementById('last');
+
+    let api = '723b06638b9b46a9a9c91ebe31407b3c';
+    async function search() {
+    let place = document.getElementById('city').value;
+    let map = `https://www.google.com/maps/embed/v1/search?q=${place}&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8`;
+    iframe.src = map;
+    let url = `https://api.weatherbit.io/v2.0/forecast/daily?city=${place}&key=${api}&days=7`
+    let res = await fetch(url);
+    let data = await res.json();
+    let name = data.city_name;
+    last.textContent = "";
+    console.log(data);
+    last.append(data.city_name);
+
+    for (let i = 0; i < data.data.length; i++) {
+    let temp = data.data[i].temp;
+    let min_temp = data.data[i].app_min_temp;
+    let desc = data.data[i].weather.description;
+    let bar = data.data[i].datetime;
+    let br = document.createElement('br');
+
+    const day = new Date (bar);
+
+    let icon = data.data[i].weather.code;
+    finIcon = document.createElement('img');
+    finIcon.setAttribute('class', 'icon');
+
+    if(icon == 200 || icon == 201 || icon == 202 || icon == 230 || icon == 231){
+      finIcon.src = "/200-233.png";
+    }
+    else if(icon == 302 || icon == 500 || icon == 501 || icon == 502 || icon == 511){
+      finIcon.src = "/300-751.png"
+    }else{
+      finIcon.src = "/752-rest.png"
+    }
+    
+    
+
+
+    console.log(icon)
+
+    results[i].textContent= "";
+    const weekday = new Array(7);
+    weekday[0] = "Sunday";
+    weekday[1] = "Monday";
+    weekday[2] = "Tuesday";
+    weekday[3] = "Wednesday";
+    weekday[4] = "Thursday";
+    weekday[5] = "Friday";
+    weekday[6] = "Saturday";
+
+    let dayName = weekday[day.getDay()];
+    results[i].append(dayName, br, finIcon, br, temp, br, min_temp);
+
+
+    // console.log(temp, desc, dayName);
+    }
+  }
+
+
+
+
+</script>

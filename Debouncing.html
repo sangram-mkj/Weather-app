@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotstar</title>
+    <style>
+        input{
+            width: 200px;
+        }
+        #movies{
+            height: 200px;
+            width: 206px;
+            overflow: scroll;
+            border: 1px solid black;
+            border-top: none;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" oninput="debounce(displayMovies, 2000)" id="query">
+    <div id="movies"></div>
+    
+</body>
+</html>
+
+<script>
+
+    let movieDiv = document.getElementById('movies');
+
+    let bomb;
+
+    async function searchMovies(){
+        try{
+        let name = document.getElementById('query').value;
+
+        let response = await fetch(`http://www.omdbapi.com/?s=${name}&apikey=7b20b01a`)
+
+        let data = await response.json();
+        return data.Search;
+        console.log(data)
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+
+
+    async function displayMovies(){
+        let movieData = await searchMovies();
+        
+        movieDiv.innerHTML = '';
+
+        if(movieData === undefined){
+
+            return false;
+        }
+        movieData.forEach(function(movie){
+
+            let p = document.createElement('p');
+
+            p.innerText = movie.Title;
+
+            movieDiv.append(p)
+
+
+        })
+console.log(movieData)
+    }
+
+    function debounce(func, delay){
+        clearTimeout(bomb);
+       bomb =  setTimeout(function(){
+            func()
+        }, delay)
+    }
+
+
+</script>
