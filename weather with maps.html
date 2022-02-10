@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false">
+
+    </script>
+    <style>
+      body{
+        background-color: darkgray;
+      }
+      #searchBar{
+        text-align: center;
+        display: inline-block;
+        border: 1px solid black;
+        height: 60px;
+        width: 40%;
+        margin: auto;
+        margin-left: 27%;
+        margin-bottom: 2%
+      }
+      #city{
+        text-align: center;
+        font-size: 25px;
+        border-radius: 5px;
+        height: 75%;
+      }
+      #search{
+        font-size: 27px;
+        border-radius: 5px;
+        border-style: none;
+        height: 90%;
+        text-align: center;
+      }
+      /* #map{
+            height: 400px;
+            width: 100%;
+        } */
+      #embedmap-canvas img{
+            max-width:none!important;
+            background:none!important;
+            font-size: inherit;
+            font-weight:inherit;
+        }
+
+      #embedmap-canvas{
+          height:100%;
+          width:100%;
+          /* max-width:100%; */
+          border: 1px solid black;
+          background-color:red;
+          margin: auto;
+        }
+
+        #resultBody{
+          display: grid;
+          grid-template-columns: 40% 40%;
+          grid-gap: 20px;
+        }
+
+        #last{
+          border: 1px solid black;
+          background-color: aqua;
+        }
+        
+    </style>
+</head>
+<body>
+  <div id="searchBar">
+    <input type="text" id="city">
+    <button id="search" onclick="search()">Search</button>
+  </div>
+
+  <div id="resultBody">
+    <div id="last"></div>
+
+    <div style="text-decoration:none; overflow:hidden;max-width:100%;width:500px;height:500px;">
+        <div id="embedmap-canvas">
+            <iframe style="height:100%;width:100%;border:0;" id='iframe' frameborder="0"></iframe>
+          </div>
+        </div>
+  </div>
+</body>
+</html>
+<script>
+    let key = "b989b04580c8376155ef689060af8897";
+
+    var iframe = document.getElementById('iframe');
+
+    // var latitude = null;
+    // var longitude = null;
+
+    var last = document.getElementById('last');
+    // last.innerHTML = latitude
+
+  let api = '723b06638b9b46a9a9c91ebe31407b3c';
+    async function search() {
+    let place = document.getElementById('city').value;
+    let map = `https://www.google.com/maps/embed/v1/search?q=${place}&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8`;
+    iframe.src = map;
+    let url = `https://api.weatherbit.io/v2.0/current?&city=${place}&key=${api}&include=minutely`
+    // `https://api.openweathermap.org/data/2.5/weather?q=${place}&appid=${key}&units=metrics`;
+    // iframe.append(iframe)
+    let res = await fetch(url);
+    let data = await res.json();
+    // let result = await fetch(url);
+    // let weather = await result.json();
+    // console.log(weather)
+    let temp = data.data[0].app_temp;
+    let name = data.data[0].city_name;   
+    // iframe.src = map;
+    console.log(data)
+    last.append(temp, name)
+    // console.log(temp, name)
+    // iframe.append(data)
+    }
+
+
+
+//GET latitude & longitude////////////////////////////////////////////////////////
+
+    // var map = null;
+		// 	function showlocation() {
+		// 	   // One-shot position request.
+		// 	    navigator.geolocation.getCurrentPosition(callback);
+		// 	}
+    	
+    //   function callback(position) {
+      	
+    //   	var lat = position.coords.latitude;
+    //   	var lon = position.coords.longitude;
+      	
+	 	// 	 latitude = lat;
+	  //        longitude = lon;
+           	
+    //   	var latLong = new google.maps.LatLng(lat, lon);
+      	
+		// 		var marker = new google.maps.Marker({
+		// 		    position: latLong
+		// 		});      
+				
+		// 		marker.setMap(map);
+    //   	map.setZoom(8);
+    //   	map.setCenter(marker.getPosition());
+    //   }
+      
+    //   google.maps.event.addDomListener(window, 'load', initMap);
+    //   function initMap() {
+    //     var mapOptions = {
+    //       center: new google.maps.LatLng(0, 0),
+    //       zoom: 1,
+    //       mapTypeId: google.maps.MapTypeId.ROADMAP
+    //     };
+    //     map = new google.maps.Map(document.getElementById("map-canvas"), 
+    //                                       mapOptions);
+      
+    //   }
+
+
+
+
+    //let url = `https://api.openweathermap.org/data/2.5/weather?q=${value}&appid=${key}&units=metrics`;
+
+    //https://www.google.com/maps/embed/v1/search?q=kolkata&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8
+    //let url = `https://api.openweathermap.org/data/2.5/weather?q=${value}&appid=${key}&units=metrics`;
+
+    // <div style="text-decoration:none; overflow:hidden;max-width:100%;width:500px;height:500px;"><div id="embedmap-canvas" style="height:100%; width:100%;max-width:100%;"><iframe style="height:100%;width:100%;border:0;" frameborder="0" src=""></iframe></div><a class="googlehtml" href="https://www.embed-map.com" id="enablemaps-data">https://www.embed-map.com</a><style>#embedmap-canvas img{max-width:none!important;background:none!important;font-size: inherit;font-weight:inherit;}</style></div>
+
+
+
+
+    
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?sensor=false">
+    </script>
+    <script type="text/javascript">
+    	
+    </script>
+  </head>
+  <body>
+  	<center>
+		<input type="button" value="Show my location on Map"
+		    	onclick="javascript:showlocation()" />   <br/>
+  	</center>
+		    	
+		Latitude: <span id="latitude"></span>       <br/>
+		Longitude: <span id="longitude"></span>
+  	<br/><br/>
+    <div id="map-canvas"/>
+  </body>
+</html> -->
